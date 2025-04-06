@@ -132,8 +132,17 @@ function addItemToGrid(gridId, item, id, isShared = false) {
 <a href="${wikiUrl}" target="_blank" style="text-decoration: none; color: inherit;">
   <img src="${item.icon}" alt="${item.name}"><br>
   ${item.name}
-</a>
+</a>    
 `;
 
   document.getElementById(gridId).appendChild(div);
 }
+
+document.getElementById("searchInput").addEventListener("input", () => {
+  const query = document.getElementById("searchInput").value.toLowerCase();
+
+  document.querySelectorAll(".item").forEach((item) => {
+    const name = item.textContent.toLowerCase();
+    item.style.display = name.includes(query) ? "" : "none";
+  });
+});
