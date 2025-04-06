@@ -10,6 +10,11 @@
         padding: 20px;
         background-color: #f4f4f4;
       }
+      .item:hover {
+        transform: scale(1.05);
+        transition: transform 0.1s ease-in-out;
+        cursor: pointer;
+      }
       #filterMode {
         padding: 5px;
         font-size: 1rem;
@@ -145,7 +150,7 @@
             const item = itemMap[id];
             if (item) {
               const isShared = shared.includes(id);
-              addItemToGrid("grid1", item, isShared);
+              addItemToGrid("grid1", item, id, isShared);
             }
           }
 
@@ -153,7 +158,7 @@
             const item = itemMap[id];
             if (item) {
               const isShared = shared.includes(id);
-              addItemToGrid("grid2", item, isShared);
+              addItemToGrid("grid2", item, id, isShared);
             }
           }
         } catch (err) {
@@ -216,11 +221,24 @@
         return map;
       }
 
-      function addItemToGrid(gridId, item, isShared = false) {
+      function addItemToGrid(gridId, item, id, isShared = false) {
         const div = document.createElement("div");
         div.className = "item";
         if (isShared) div.classList.add("shared");
-        div.innerHTML = `<img src="${item.icon}" alt="${item.name}"><br>${item.name}`;
+        div.dataset.id = id; // Store the ID in a data attribute
+        div.title = `Item ID: ${id}`; // Show ID on hover
+
+        // Link to OSRS Wiki (URL-safe item name)
+        const wikiName = encodeURIComponent(item.name.replace(/ /g, "_"));
+        const wikiUrl = `https://oldschool.runescape.wiki/w/${wikiName}`;
+
+        div.innerHTML = `
+    <a href="${wikiUrl}" target="_blank" style="text-decoration: none; color: inherit;">
+      <img src="${item.icon}" alt="${item.name}"><br>
+      ${item.name}
+    </a>
+  `;
+
         document.getElementById(gridId).appendChild(div);
       }
     </script>
