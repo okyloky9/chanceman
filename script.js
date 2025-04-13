@@ -108,6 +108,7 @@ async function getItemMapping() {
   const map = {};
   for (const item of allItems) {
     map[item.id] = {
+      id: item.id,
       name: item.name,
       icon: `https://oldschool.runescape.wiki/images/${encodeURIComponent(
         item.name.replace(/ /g, "_")
@@ -120,17 +121,24 @@ async function getItemMapping() {
 function addItemToGrid(gridOrId, item, id, isShared = false) {
   const div = document.createElement("div");
   div.className = "item";
-  if (isShared) div.classList.add("shared");
+  div.classList.add(isShared ? "shared" : "nonshared");
 
   const wikiName = encodeURIComponent(item.name.replace(/ /g, "_"));
   const wikiUrl = `https://oldschool.runescape.wiki/w/${wikiName}`;
 
   div.innerHTML = `
-    <a href="${wikiUrl}" target="_blank" style="text-decoration: none; color: inherit;">
-      <img src="${item.icon}" alt="${item.name}"><br>
-      ${item.name}<br>
-      <span class="item-id">ID: ${id}</span>
-    </a>
+    <div class="item-container">
+  <div class="item">
+    <div class="item-image-wrapper">
+      <a href="${wikiUrl}" target="_blank" style="text-decoration: none; color: inherit;">
+        <img src="${item.icon}" onerror="this.onerror=null; this.src='https://chisel.weirdgloop.org/static/img/osrs-sprite/${item.id}.png'">
+        <br>${item.name}
+      </a>
+    </div>
+    <button class="item-id-btn" onclick="copyToClipboard(${id}, this)">Copy ID: ${id}</button>
+  </div>
+  <!-- Repeat above structure for other items -->
+</div>
   `;
 
   const container =
@@ -147,3 +155,17 @@ document.getElementById("searchInput").addEventListener("input", () => {
     item.style.display = name.includes(query) ? "" : "none";
   });
 });
+
+function copyToClipboard(id, button) {
+  navigator.clipboard
+    .writeText(id.toString())
+    .then(() => {
+      button.textContent = "Copied!";
+      setTimeout(() => {
+        button.textContent = `Copy ID: ${id}`;
+      }, 1000);
+    })
+    .catch((err) => {
+      console.error("Failed to copy ID:", err);
+    });
+}
