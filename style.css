@@ -27,25 +27,20 @@ body {
   }
   .container {
     display: grid;
-    grid-template-columns: repeat(2, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, minmax(300px, 1fr));
     gap: 20px;
     width: 100%;
     max-width: 100%;
     padding: 20px;
   }
-  .file-box {
-    background-color: #ffffff;
-    padding: 15px;
+  .scroll-container {
+    max-height: 600px;
+    overflow-y: auto;
     border: 1px solid #ccc;
-    border-radius: 10px;
-    min-width: 300px;
-    max-width: 100%;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-  .file-box h2 {
-    margin-top: 0;
-    font-size: 1.1rem;
-    text-align: center;
+    padding: 10px;
+    margin-bottom: 20px;
+    background: #f9f9f9;
+    border-radius: 6px;
   }
   .grid {
     display: flex;
