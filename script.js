@@ -117,25 +117,26 @@ async function getItemMapping() {
   return map;
 }
 
-function addItemToGrid(gridId, item, id, isShared = false) {
+function addItemToGrid(gridOrId, item, id, isShared = false) {
   const div = document.createElement("div");
   div.className = "item";
   if (isShared) div.classList.add("shared");
-  div.dataset.id = id; // Store the ID in a data attribute
-  div.title = `Item ID: ${id}`; // Show ID on hover
 
-  // Link to OSRS Wiki (URL-safe item name)
   const wikiName = encodeURIComponent(item.name.replace(/ /g, "_"));
   const wikiUrl = `https://oldschool.runescape.wiki/w/${wikiName}`;
 
   div.innerHTML = `
-<a href="${wikiUrl}" target="_blank" style="text-decoration: none; color: inherit;">
-  <img src="${item.icon}" alt="${item.name}"><br>
-  ${item.name}
-</a>    
-`;
+    <a href="${wikiUrl}" target="_blank" style="text-decoration: none; color: inherit;">
+      <img src="${item.icon}" alt="${item.name}"><br>
+      ${item.name}<br>
+      <span class="item-id">ID: ${id}</span>
+    </a>
+  `;
 
-  document.getElementById(gridId).appendChild(div);
+  const container =
+    typeof gridOrId === "string" ? document.getElementById(gridOrId) : gridOrId;
+
+  if (container) container.appendChild(div);
 }
 
 document.getElementById("searchInput").addEventListener("input", () => {
