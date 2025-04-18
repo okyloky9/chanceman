@@ -293,6 +293,14 @@ function renderItemGrids() {
   }
 
   window.scrollTo({ top: scrollY });
+
+  const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+  if (searchTerm) {
+    document.querySelectorAll(".item").forEach((item) => {
+      const name = item.textContent.toLowerCase();
+      item.style.display = name.includes(searchTerm) ? "" : "none";
+    });
+  }
 }
 
 document.getElementById("file3").addEventListener("change", async (e) => {
